@@ -165,17 +165,35 @@ The message queue should pass on the data as is from collectors.
 
 ## RT (Storm)
 
+### Description
+
 [RT is the Real-time processing component of Stucco.](https://github.com/stucco/rt)
 
 ![overview of architecture](https://raw.github.com/stucco/docs/master/docs/arch.png) 
 
 This diagram shows how RT connects to the other components described here.
 
-It will accept messages through AMQP, formatted as described in the "output format" subsection of "collection," above.
-
-If the data is not already included in the document store, it will be added.
+If the data it receives is not already included in the document store, it will be added.
 
 The data it receives will be transformed into a graph, consistant with the [ontology definition](https://github.com/stucco/ontology), and then added into the neo4j instance.
+
+### Configuration
+
+config.yaml file sets several options related to the AMQP queue and the number of bolt instances.
+
+### Input format
+
+It will accept messages through AMQP, formatted as described in the "output format" subsection of "collection," above.
+
+It will send an acknowledgement to the queue when the messages are received, so that the queue can release these resources.
+
+### Output format
+
+RT will generate a graph section from all input data, and merge this into the graph database instance.
+
+RT will also add the raw documents it receives to the document store if needed.
+
+RT may add additional intermediate output (eg. partially labeled text documents) to the document store if needed.
 
 ---------------------------------------------------------------------
 
