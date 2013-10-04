@@ -106,13 +106,16 @@ Input format will depend on the type of collector.
 
 There are two types of output messages: (1) messages with data and (2) messages without data that reference an ID in the document store.
 
-All messages should be formatted as a JSON object. All JSON messages should be converted to strings (i.e. using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)).
+All messages should be formatted as a JSON object.
+All JSON messages should be converted to strings (i.e. using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)).
 
 All messages should contain the following fields. Either `document-id` or `content` must be included.
 
 * `sourceName` (string) - the name of the source of the message; e.g. ‘cve’ (required)
-* `sourceUrl` (string) - the url of the document – this should be a link to the document itself; e.g. http://cve.mitre.org/data/downloads/allitems.xml, Note: in some cases this URL will point ot a generic URL that requires an API.  In those cases we will provide the URL and then describe whether we have an API call with it and what metadata was used to get the content from the site. (optional)
-* `sourceMetadataUsed` (string) - will contain context specific metadata for the site being accessed.  For example if the URL requires a set of query terms or terms for access those are listed (optional)
+* `sourceUrl` (string) - the url of the document – this should be a link to the document itself; e.g. http://cve.mitre.org/data/downloads/allitems.xml, Note: in some cases this URL will point ot a generic URL that requires an API.
+In those cases we will provide the URL and then describe whether we have an API call with it and what metadata was used to get the content from the site. (optional)
+* `sourceMetadataUsed` (string) - will contain context specific metadata for the site being accessed.
+For example if the URL requires a set of query terms or terms for access those are listed (optional)
 * `dateCollected` (number) - the unix timestamp (i.e. date +%s) when the document was collected; e.g. 1377114034 (required)
 * `collectorType` (string) - this defines the type content, whether exogenous or endogenous, enumerated types: WEBContent, hone, assets, netflow  (optional)
 * `documentName` (string) - the name of the document represented by the message; e.g. ‘allitems’ (optional)
@@ -143,7 +146,8 @@ An example output would be:
 
 ### Description
 
-The message queue accepts input (documents) from the collectors and pushes the documents into the processing pipeline. The collectors should send data into the default exchange into the queue named `stucco`.
+The message queue accepts input (documents) from the collectors and pushes the documents into the processing pipeline.
+The collectors should send data into the default exchange into the queue named `stucco`.
 
 ### State
 
@@ -161,12 +165,15 @@ The message queue should pass on the data as is from collectors.
 
 ## RT (Storm)
 
+[RT is the Real-time processing component of Stucco.](https://github.com/stucco/rt)
 
+[This diagram](./arch.svg) shows how RT connects to the other components described here.
 
+It will accept messages through AMQP, formatted as described in the "output format" subsection of "collection," above.
 
-Document Store
-An HTTP API for adding and retrieving documents from the document store.
-Interfaces
+If the data is not already included in the document store, it will be added.
+
+The data it receives will be transformed into a graph, consistant with the [ontology definition](https://github.com/stucco/ontology), and then added into the neo4j instance.
 
 ---------------------------------------------------------------------
 
