@@ -167,7 +167,7 @@ The message queue should pass on the data as is from collectors.
 
 [RT is the Real-time processing component of Stucco.](https://github.com/stucco/rt)
 
-[This diagram](./arch.svg) shows how RT connects to the other components described here.
+![overview of architecture](https://raw.github.com/stucco/docs/master/docs/arch.svg) This diagram shows how RT connects to the other components described here.
 
 It will accept messages through AMQP, formatted as described in the "output format" subsection of "collection," above.
 
