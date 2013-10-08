@@ -211,8 +211,8 @@ Be sure to set the `content-type` of the HTTP header when adding documents to th
 
 Routes:
 
-* `server:port/add` - add a document and autogenerate an id
-* `server:port/add/id` - add a document with a specific id
+* PUT `server:port/document` - add a document and autogenerate an id
+* PUT `server:port/document/id` - add a document with a specific id
 
 #### Get Document
 
@@ -222,7 +222,7 @@ The `accept` command can be one of the following: `application/json`, `text/plai
 
 Routes:
 
-* `server:port/get/id` - get a document based on the specific id
+* GET `server:port/document/id` - retrieve a document based on the specific id
 
 ### Output Transport Protocol
 
