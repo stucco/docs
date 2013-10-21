@@ -211,8 +211,8 @@ Be sure to set the `content-type` of the HTTP header when adding documents to th
 
 Routes:
 
-* `server:port/add` - add a document and autogenerate an id
-* `server:port/add/id` - add a document with a specific id
+* PUT `server:port/document` - add a document and autogenerate an id
+* PUT `server:port/document/id` - add a document with a specific id
 
 #### Get Document
 
@@ -222,7 +222,7 @@ The `accept` command can be one of the following: `application/json`, `text/plai
 
 Routes:
 
-* `server:port/get/id` - get a document based on the specific id
+* GET `server:port/document/id` - retrieve a document based on the specific id
 
 ### Output Transport Protocol
 
@@ -230,7 +230,21 @@ HTTP.
 
 ### Input format
 
-JSON.
+JSON. The following fields may be used by the `add` commands and will be returned by the `get` commands:
+
+* `sourceName` (string) - the name of the source of the message; e.g. ‘cve’ (required)
+* `sourceUrl` (string) - the url of the document – this should be a link to the document itself; e.g. http://cve.mitre.org/data/downloads/allitems.xml, Note: in some cases this URL will point ot a generic URL that requires an API.
+In those cases we will provide the URL and then describe whether we have an API call with it and what metadata was used to get the content from the site. (optional)
+* `sourceMetadataUsed` (string) - will contain context specific metadata for the site being accessed.
+For example if the URL requires a set of query terms or terms for access those are listed (optional)
+* `dateCollected` (number) - the unix timestamp (i.e. date +%s) when the document was collected; e.g. 1377114034 (required)
+* `collectorType` (string) - this defines the type content, whether exogenous or endogenous, enumerated types: WEBContent, hone, assets, netflow  (optional)
+* `documentName` (string) - the name of the document represented by the message; e.g. ‘allitems’ (optional)
+* `documentCreation` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1365012038 (optional)
+* `documentModification` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1366135032 (optional)
+* `contentType` (string) - the MIME type of the message; e.g. text/xml @see http://www.iana.org/assignments/media-types (required)
+* `content` (base64 encoded string) - the JSON object to send to Riak, currently BASE64 encoded  (required)
+* `documentId` (string) - `add` will return a documentId and `get` requires a documentId
 
 ### Output Transport Protocol
 
