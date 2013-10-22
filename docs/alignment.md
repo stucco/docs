@@ -8,7 +8,7 @@ There are two broad categories of alignment:
   * If a matching canonical name is *not* found in the knowledge graph, add the node.
   * If a matching canonical name is found in the knowledge graph, [merge properties](#merge-properties) and [merge edges](#merge-edges).
 2. Merging nodes without canonical names / unique IDs (e.g. malware). Some of these nodes may not have a canonical name, others may have a canoncial name but it is not available:
-  * [Identify equivalient nodes](#identify-equivalient-nodes) and score the confidence that the two nodes refer to the same domain concept.
+  * [Identify equivalent nodes](#identify-equivalent-nodes) and score the confidence that the two nodes refer to the same domain concept.
 
 
 ## Merge Properties
