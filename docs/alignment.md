@@ -18,8 +18,10 @@ When merging two nodes or edges where the new and existing values of a property 
 General process when merging nodes (properties that had `null` for either the existing or new value can be handled in the same way):
 
 * **resolve value**: for each conflicting property, identify the updated value to insert into the knowledge graph. e.g.:  
-  `existing\_node["conflicting\_property"] = resolve\_property\_with\_strategy(conflicting\_property, existing\_node, new\_node)`
-* **update graph**: update `existing\_node.conflicting\_property` in the knowledge graph. `new_node` will not be added to graph.
+```
+existing_node["conflicting_property"] = resolve_property_with_strategy(conflicting_property, existing_node, new_node)
+```
+* **update graph**: update `existing_node.conflicting_property` in the knowledge graph. `new_node` will not be added to graph.
 
 *Note*:  Edges to/from `new_node` in the subgraph will be created in the knowledge graph to `existing_node`. (This assumes all nodes from the subgraph are added to the knowledge graph before edges.)
 
