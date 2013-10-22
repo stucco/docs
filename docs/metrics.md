@@ -1,3 +1,5 @@
+# Metrics
+
 ## Purpose
 
 Metrics will primarily be used to resolve conflicts during the alignment process.
