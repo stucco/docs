@@ -260,13 +260,50 @@ JSON.
 
 ---------------------------------------------------------------------
 
-## Log Server
+## Configuration Service
+
+*Work in progress*
 
 ### Description
 
-A log server collects and aggregates logs from each of the components. The log server is implemented as a logstash server. Sending logs to the server should be done via the TCP input plugin. 
+The configuration service hosts configuration information for all services. It is implemented in [etcd](http://coreos.com/using-coreos/etcd/).
 
-The Vagrant VM is set up with a logstash server to aggregate log files. Log files can be input in multiple ways. There is a simple configuration set up in the Vagrantfile. The easiest way to send logs is to send them over a TCP connection. For an example in node.js and python, see https://gist.github.com/jgoodall/6323951
+### Configuration
+
+The `etcd` configuration is [described here](https://github.com/coreos/etcd/blob/master/Documentation/configuration.md#configuration-file). The default stucco configuration is loaded into `etcd` when instantiated. 
+
+### Usage
+
+To communicate with the configuration service, either use HTTP or use [a client library](https://github.com/coreos/etcd/blob/master/Documentation/libraries-and-tools.md) that supports version 2. There is also a [command line client](https://github.com/coreos/etcdctl/). To test with HTTP, use `curl`:
+
+    curl -L http://127.0.0.1:4001/v2/keys/mykey -XPUT -d value="this is awesome"
+    curl -L http://127.0.0.1:4001/v2/keys/mykey
+
+
+### Input Transport Protocol
+
+HTTP/REST or using client library.
+
+### Input Format
+
+JSON (for HTTP), or specific to the client library used.
+
+### Output Transport Protocol
+
+JSON (for HTTP), or specific to the client library used.
+
+### Output Format
+
+HTTP/REST or using client library.
+
+
+---------------------------------------------------------------------
+
+## Logging Service
+
+### Description
+
+The logging service collects and aggregates logs from each of the components. The log server is implemented as a [logstash](http://logstash.net/) server with an [elasticsearch](http://www.elasticsearch.org/) backend. 
 
 ### Configuration
 
@@ -280,6 +317,12 @@ input {
     format => "json_event"
   }
 }
+
+### Usage
+
+Sending logs to the server should be done via the [TCP input plugin](http://logstash.net/docs/1.3.2/inputs/tcp). 
+
+The Vagrant VM is set up with a logstash server to aggregate log files. Log files can be input in multiple ways. There is a simple configuration set up in the Vagrantfile. The easiest way to send logs is to send them over a TCP connection. For an example in node.js and python, see https://gist.github.com/jgoodall/6323951
 
 ### Input Transport Protocol
 
