@@ -1,11 +1,14 @@
 # Stucco Architecture
 
+![Architecture diagram](../diagrams/arch-v0.2.png)
+
+
 In general, the following guidelines should be followed:
 
 * Configuration files should be defined in [yaml](http://yaml.org/)
-* Communication outside of Storm should use AMQP via [RabbitMQ](http://www.rabbitmq.com/)
-* Messages should be formatted as [JSON](http://json.org/)
+* Messages between services should be formatted as [JSON](http://json.org/) and sent via HTTP
 * Logs should be sent to [logstash](http://logstash.net/) as JSON via the [TCP Input](http://logstash.net/docs/1.2.1/inputs/tcp)
+* Messages into Storm should be via AMQP using [RabbitMQ](http://www.rabbitmq.com/)
 
 
 ---------------------------------------------------------------------
