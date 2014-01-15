@@ -167,9 +167,7 @@ The message queue should pass on the data as is from collectors.
 
 ### Description
 
-[RT is the Real-time processing component of Stucco.](https://github.com/stucco/rt)
-
-![overview of architecture](https://raw.github.com/stucco/docs/master/docs/arch.png) 
+[RT](https://github.com/stucco/rt) is the Real-time processing component of Stucco implemented as a [Storm](http://storm-project.net/) cluster.
 
 This diagram shows how RT connects to the other components described here.
 
@@ -201,7 +199,7 @@ RT may add additional intermediate output (eg. partially labeled text documents)
 
 ### Description
 
-The document store contains the raw documents. The backend is implemented in Riak, but the document-service API abstracts that.
+The [document-service](https://github.com/stucco/document-service) stores and makes available the raw documents. The backend storage for the document service is implemented in [Riak](http://basho.com/riak/).
 
 ### Commands
 
