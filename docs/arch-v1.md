@@ -224,7 +224,7 @@ Routes:
 
 * GET `server:port/document/id` - retrieve a document based on the specific id
 
-### Output Transport Protocol
+### Input Transport Protocol
 
 HTTP.
 
