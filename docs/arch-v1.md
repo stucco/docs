@@ -265,15 +265,19 @@ JSON.
 
 ## Configuration Service
 
-*Work in progress*
-
 ### Description
 
 The configuration service hosts configuration information for all services. It is implemented in [etcd](http://coreos.com/using-coreos/etcd/).
 
 ### Configuration
 
-The `etcd` configuration is [described here](https://github.com/coreos/etcd/blob/master/Documentation/configuration.md#configuration-file). The default stucco configuration is loaded into `etcd` when instantiated. 
+The `etcd` configuration is [described here](https://github.com/coreos/etcd/blob/master/Documentation/configuration.md#configuration-file). The default stucco configuration is loaded into `etcd` when instantiated by the [config-loader](https://github.com/stucco/config-loader).  The default stucco configuration, [`stucco.yml`](https://github.com/stucco/config/blob/master/stucco.yml) is in the [config repo](https://github.com/stucco/config); edit that file to have the configuration changes loaded. The nested configuration in the `stucco.yml` gets translated to the url path, so, 
+
+    stucco
+      document-service
+        port
+
+Would be accessible using the following URL: `http://127.0.0.1:4001/v2/keys/stucco/document-service/port`.
 
 ### Usage
 
