@@ -37,9 +37,9 @@ Example resolution functions:
         return existing_node["property_name"]
     }
 
-    //confidence is a float between 0 and 1
+    //confidence ("score") is a float between 0 and 1
     resolve_property_by_confidence(property_name, existing_node, new_node) {
-      if (existing_node["confidence"] < new_node["confidence"]) 
+      if (existing_node["score"] < new_node["score"]) 
         return new_node["property_name"]
       else
         return existing_node["property_name"]
@@ -72,3 +72,209 @@ Based on this subset of nodes, a comparison algorithm will run to assign a simil
   * This is calculated by function TBD.
   * If the value is 0, (or below some threshold TBD,) the edge should be excluded.
   * If the value is 1, (or above some threshold TBD,) the two nodes should be merged.
+
+- - - - -
+
+# Examples
+
+### Trivial cases: adding a new node, adding a new group of nodes/edges, adding the same new node multiple times.
+
+### Matching IDs, one node, adding a reference to list
+
+**Old State:**
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-1999-0002",
+          "_type": "vertex",
+          "source": "CVE",
+          "description": "Buffer overflow in NFS mountd gives root access to remote attackers, mostly in Linux systems.",
+          "references": [
+            "CERT:CA-98.12.mountd",
+            "http://www.ciac.org/ciac/bulletins/j-006.shtml",
+            "http://www.securityfocus.com/bid/121",
+            "XF:linux-mountd-bo"
+          ],
+          "status": "Entry",
+          "score": 1.0
+        }
+      ]
+    }
+
+**Update:**
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-1999-0002",
+          "_type": "vertex",
+          "source": "CVE",
+          "description": "",
+          "references": [
+            "ftp://patches.sgi.com/support/free/security/advisories/19981006-01-I"
+          ],
+          "status": "Entry",
+          "score": 1.0
+        }
+      ]
+    }
+
+**New State:** combine list of references
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-1999-0002",
+          "_type": "vertex",
+          "source": "CVE",
+          "description": "Buffer overflow in NFS mountd gives root access to remote attackers, mostly in Linux systems.",
+          "references": [
+            "ftp://patches.sgi.com/support/free/security/advisories/19981006-01-I",
+            "CERT:CA-98.12.mountd",
+            "http://www.ciac.org/ciac/bulletins/j-006.shtml",
+            "http://www.securityfocus.com/bid/121",
+            "XF:linux-mountd-bo"
+          ],
+          "status": "Entry",
+          "score": 1.0
+        }
+      ]
+    }
+
+### Matching IDs, one node, update a property based on revision date/time
+
+**Old State:**
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-2013-4878",
+          "_type": "vertex",
+          "vertexType": "vulnerability",
+          "source": "NVD",
+          "description": "The default configuration of Parallels Plesk Panel 9.0.x and 9.2.x on UNIX, and Small Business Panel 10.x on UNIX, has an improper ScriptAlias directive for phppath, which makes it easier for remote attackers to execute arbitrary code via a crafted request.",
+          "publishedDate": "2013-07-18T12:51:56.227-04:00",
+          "modifiedDate": "2013-07-18T12:51:56.227-04:00",
+          "score": 1.0,
+          "cweNumber": "CWE-264",
+          "cvssScore": 6.8,
+          "accessVector": "NETWORK",
+          "accessComplexity": "MEDIUM",
+          "accessAuthentication": "NONE",
+          "confidentialityImpact": "PARTIAL",
+          "integrityImpact": "PARTIAL",
+          "availabilityImpact": "PARTIAL",
+          "cvssDate": "2013-07-19T16:37:00.000-04:00"
+        }
+      ]
+    }
+
+**Update:**
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-2013-4878",
+          "_type": "vertex",
+          "vertexType": "vulnerability",
+          "source": "NVD",
+          "description": "The default configuration of Parallels Plesk Panel 9.0.x and 9.2.x on UNIX, and Small Business Panel 10.x on UNIX, has an improper ScriptAlias directive for phppath, which makes it easier for remote attackers to execute arbitrary code via a crafted request, a different vulnerability than CVE-2012-1823.",
+          "publishedDate": "2013-07-18T12:51:56.227-04:00",
+          "modifiedDate": "2013-07-19T16:51:21.577-04:00",
+          "score": 1.0,
+          "cweNumber": "CWE-264",
+          "cvssScore": 6.8,
+          "accessVector": "NETWORK",
+          "accessComplexity": "MEDIUM",
+          "accessAuthentication": "NONE",
+          "confidentialityImpact": "PARTIAL",
+          "integrityImpact": "PARTIAL",
+          "availabilityImpact": "PARTIAL",
+          "cvssDate": "2013-07-19T16:37:00.000-04:00"
+        }
+      ]
+    }
+
+**New State:** overwrite old description with new, like `resolve_property_with_newest` example above.
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-2013-4878",
+          "_type": "vertex",
+          "vertexType": "vulnerability",
+          "source": "NVD",
+          "description": "The default configuration of Parallels Plesk Panel 9.0.x and 9.2.x on UNIX, and Small Business Panel 10.x on UNIX, has an improper ScriptAlias directive for phppath, which makes it easier for remote attackers to execute arbitrary code via a crafted request, a different vulnerability than CVE-2012-1823.",
+          "publishedDate": "2013-07-18T12:51:56.227-04:00",
+          "modifiedDate": "2013-07-19T16:51:21.577-04:00",
+          "score": 1.0,
+          "cweNumber": "CWE-264",
+          "cvssScore": 6.8,
+          "accessVector": "NETWORK",
+          "accessComplexity": "MEDIUM",
+          "accessAuthentication": "NONE",
+          "confidentialityImpact": "PARTIAL",
+          "integrityImpact": "PARTIAL",
+          "availabilityImpact": "PARTIAL",
+          "cvssDate": "2013-07-19T16:37:00.000-04:00"
+        }
+      ]
+    }
+
+### Matching IDs, one node, data from two sources.  update a property based on confidence scores.  Maintain timestamps as appropriate.
+
+**Old State:**
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-2012-5217",
+          "_type": "vertex",
+          "vertexType": "vulnerability",
+          "source": "Something that isn't NVD",
+          "description": "HP System Management Homepage (SMH) before 7.2.1 allows remote attackers to bypass intended access restrictions and obtain sensitive information via unspecified vectors, a different vulnerability than CVE-2013-2355.",
+          "publishedDate": "2013-07-22T07:19:33.783-04:00",
+          "modifiedDate": "2013-07-26T00:00:00.000-04:00",
+          "score": 0.6
+        }
+      ]
+    }
+
+**Update:**
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-2013-5217",
+          "_type": "vertex",
+          "vertexType": "vulnerability",
+          "source": "NVD",
+          "description": "** REJECT **  DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2012-5217.  Reason: This candidate is a duplicate of CVE-2012-5217.  A typo caused the wrong ID to be used.  Notes: All CVE users should reference CVE-2012-5217 instead of this candidate.  All references and descriptions in this candidate have been removed to prevent accidental usage.",
+          "publishedDate": "2013-07-22T07:20:46.637-04:00",
+          "modifiedDate": "2013-07-22T07:20:47.053-04:00",
+          "score": 1.0
+        }
+      ]
+    }
+
+**New State:** overwrite less reliable description with the more reliable one, like `resolve_property_by_confidence` example above.
+
+    {
+      "vertices": [
+        {
+          "_id": "CVE-2013-5217",
+          "_type": "vertex",
+          "vertexType": "vulnerability",
+          "source": "NVD",
+          "description": "** REJECT **  DO NOT USE THIS CANDIDATE NUMBER. ConsultIDs: CVE-2012-5217.  Reason: This candidate is a duplicate of CVE-2012-5217.  A typo caused the wrong ID to be used.  Notes: All CVE users should reference CVE-2012-5217 instead of this candidate.  All references and descriptions in this candidate have been removed to prevent accidental usage.",
+          "publishedDate": "2013-07-22T07:19:33.783-04:00",
+          "modifiedDate": "2013-07-26T00:00:00.000-04:00",
+          "score": 1.0
+        }
+      ]
+    }
+
+### Partial overlap cases (multiple nodes, some of witch match, but with additional nodes and/or edges.)
+
+### Finding and merging matching nodes, without matching names (Missing or differing _id fields)
