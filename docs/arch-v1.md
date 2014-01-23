@@ -173,7 +173,7 @@ The message queue should pass on the data as is from collectors.
 
 [RT](https://github.com/stucco/rt) is the Real-time processing component of Stucco implemented as a [Storm](http://storm-project.net/) cluster.
 
-This diagram shows how all the RT components are connected.
+This diagram shows how all the RT components are connected. The diagram at the very top shows how RT connects to the other components described in this document.
 
 If the data it receives is not already included in the document store, it will be added.
 
