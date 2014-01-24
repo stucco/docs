@@ -150,7 +150,7 @@ An example output would be:
 ### Description
 
 The message queue accepts input (documents) from the collectors and pushes the documents into the processing pipeline.
-The collectors should send data into the default exchange into the queue named `stucco`.
+The collectors should send data into the default exchange, the queue named `stucco`. The message queue is implemented with RabbitMQ, which utilizes the AMQP standard.
 
 ### State
 
@@ -167,12 +167,13 @@ The message queue should pass on the data as is from collectors.
 ---------------------------------------------------------------------
 
 ## RT (Storm)
+![RT diagram](../diagrams/rt-v0.1.png)
 
 ### Description
 
 [RT](https://github.com/stucco/rt) is the Real-time processing component of Stucco implemented as a [Storm](http://storm-project.net/) cluster.
 
-This diagram shows how RT connects to the other components described here.
+This diagram shows how all the RT components are connected. The diagram at the very top shows how RT connects to the other components described in this document.
 
 If the data it receives is not already included in the document store, it will be added.
 
@@ -182,15 +183,19 @@ The data it receives will be transformed into a graph, consistent with the [onto
 
 config.yaml file sets several options related to the AMQP queue and the number of bolt instances.
 
-### Input format
+### Input Transport Protocol
+[See AMQP Spout](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#amqp-spout)
 
-It will accept messages through AMQP, formatted as described in the "output format" subsection of "collection," above.
+### Input Format
+[See AMQP Spout](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#amqp-spout)
 
-It will send an acknowledgement to the queue when the messages are received, so that the queue can release these resources.
+The spout will send an acknowledgement to the queue when the messages are received, so that the queue can release these resources.
 
-### Output format
+### Output Transport Protocol
+[See Graph Bolt](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#graph-bolt)
 
-RT will generate a graph section from all input data, and merge this into the graph database instance.
+### Output Format
+[See Graph Bolt](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#graph-bolt)
 
 RT will also add the raw documents it receives to the document store if needed.
 
