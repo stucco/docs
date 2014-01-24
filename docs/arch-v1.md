@@ -461,6 +461,33 @@ JSON.
 
 ## Graph Store API
 
+### Description
+
+The Graph Store API allows the Alignment bolt, the Visualization/UI, and any third-party applications to interface with the graph database.  
+
+This API provides a [GraphSON](https://github.com/tinkerpop/blueprints/wiki/GraphSON-Reader-and-Writer-Library) interface over HTTP.
+
+The API will provide functions that facilitate common operations (eg. get a node by ID) and also allow arbitrary [Gremlin](https://github.com/tinkerpop/gremlin/wiki) queries.  (As the API matures, the use of arbitrary Gremlin queries will be removed or restricted to the Alignment bolt only.)
+
+The API will be implemented with Rexter and a set of [Rexter Extensions.](https://github.com/tinkerpop/rexster/wiki/Extensions)
+
+### Routes
+
+* `host:port/graphs/stucco/type/<typename>`  
+  Returns a list of all nodes of type `<typename>`
+* `host:port/graphs/stucco/node/<nodename>`  
+  Returns the node with the specified `<nodename>`
+* `host:port/graphs/stucco/tp/gremlin?<gremlinquery>`  
+  Runs the given `<gremlinquery>` and returns any results
+
+### Transport Protocol
+
+HTTP.
+
+### Transport Format
+
+GraphSON.
+
 
 ---------------------------------------------------------------------
 
