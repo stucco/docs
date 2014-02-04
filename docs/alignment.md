@@ -10,6 +10,33 @@ There are two broad categories of alignment:
 2. Merging nodes without canonical names / unique IDs (e.g. malware). Some of these nodes may not have a canonical name, others may have a canoncial name but it is not available:
   * [Identify equivalent nodes](#identify-equivalent-nodes) and score the confidence that the two nodes refer to the same domain concept.
 
+## General Concerns/Issues
+The section attempts to highlight issues that the current alignment process either needs to resolve.
+
+1. The alignment rule set will need to be based on the ontology properties which are reflected in the JSON schema.  As such, any new rules developed should be verified against this schema (similar to XSD in XML).
+2. Rule construction may want to leverage a DSL to make construction and verification of the rules easier to manage.
+3. As rules are constructed are these rules maintained in a DB or loaded via file
+4. Manual Correction Tool
+	* Ability to revert/override modifications to the GraphDB if there are incorrect insertions
+	* Ability to add content without having to go through the pipeline
+	* See the provenance on a node/edge and know what entries made that contribution or had the same contribution
+5. Consider provide a holding queue (Parking Lot) for entries that have enough conflicting evidence that manual intervention is needed.
+6. Log provenance information on changes/updates on edges and nodes.
+7. When updates occur on either a node or edge the result is:
+	* Overwrite content
+	* Append content (simple merge)
+	* Merge Content (identify what portions should be combined)
+8. Need to determine for different nodes/edges what comparison measure should be used. What kinds of comparison measures are needed. How much of deviation results in creation of a new node/edge instance, updates or parking lot.
+	* For canonical names or IDs the comparison the function should be an equality measure
+	* For dates we need to consider time stamps that vary with only year down to the second (i.e., general to precise).  How will we deal with this broad range (unless we provide range values)?
+	* For unstructured text there are several approaches but this will depend upon the property in question.
+9. Meta-Rules will need to be used to make sure that that updates will be smart.  For example, new sources of information may provide old content and shouldn't overwrite current content.  Checking time stamps to know what content is most recent.
+
+
+## Research Avenues
+There are several venues to deal with the alignment problem in other domains.  In the Database domain this is called the merge/purge problem of combining different databases.  The theory is similar however the underlying structures are different because we are using a graph database whereas your standard relational DB is row-column oriented.  Part of this task will be exploring what functional pieces can be leverage from the DB community and what pieces can be leveraged from the graph community. 
+Things to Research:
+	* Approximate subgraph matching with graph edit distance.  This will help identify which sub-graphs are most likely a match.  However, it won't be conclusive as additional functions need to be applied at the individuals levels to determine the update/insertion action.
 
 ## Merge Properties
 
@@ -275,6 +302,6 @@ Based on this subset of nodes, a comparison algorithm will run to assign a simil
       ]
     }
 
-### Partial overlap cases (multiple nodes, some of witch match, but with additional nodes and/or edges.)
+### Partial overlap cases (multiple nodes, some of which match, but with additional nodes and/or edges.)
 
 ### Finding and merging matching nodes, without matching names (Missing or differing _id fields)
