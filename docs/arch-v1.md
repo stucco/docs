@@ -182,7 +182,6 @@ The message queue should pass on the data as is from collectors.
 ---------------------------------------------------------------------
 
 ## RT (Storm)
-![RT diagram](../diagrams/rt-v0.1.png)
 
 ### Description
 
@@ -447,11 +446,11 @@ JSON.
 
 ---------------------------------------------------------------------
 
-## Graph Store API
+## Query Service
 
 ### Description
 
-The Graph Store API allows the Alignment bolt, the Visualization/UI, and any third-party applications to interface with the graph database.  
+The Query Service provides the API for the Graph Store to allow the Alignment bolt, the Visualization/UI, and any third-party applications to interface with the graph database.  
 
 This API provides a [GraphSON](https://github.com/tinkerpop/blueprints/wiki/GraphSON-Reader-and-Writer-Library) interface over HTTP.
 
