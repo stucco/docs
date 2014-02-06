@@ -31,6 +31,8 @@ Web collectors pull a document via HTTP/HTTPS given a URL. Documents will be dec
 
 ##### Configuration
 
+**TODO.**
+
 ##### Content format
 
 Various (e.g. HTML, XML, CSV). 
@@ -41,6 +43,8 @@ Scrapers pull data embedded within a web page via HTTP/HTTPS given a URL and an 
 
 ##### Configuration
 
+**TODO.**
+
 ##### Content format
 
 HTML.
@@ -50,6 +54,8 @@ HTML.
 RSS collectors pull an RSS/ATOM feed via HTTP/HTTPS given a URL.
 
 ##### Configuration
+
+**TODO.**
 
 ##### Content format
 
@@ -62,6 +68,7 @@ Twitter collectors pull Tweet data via HTTP from the Twitter Search REST API giv
 ##### Configuration
 
 Twitter API Key
+Keywords and/or usernames to track
 
 ##### Content format
 
@@ -70,6 +77,14 @@ JSON.
 #### Netflow collector
 
 Netflow collectors will collect from [Argus](http://www.qosient.com/argus/). The collector will listen for argus streams using `ra` tool and convert to XML and pipe to send the flow data to the message queue as a string.
+
+##### Configuration
+
+**TODO.**
+
+##### Content format
+
+**TODO.**
 
 #### Host-based collectors
 
@@ -83,7 +98,7 @@ Host-based collectors should be able to collect and forward:
 
 ##### Configuration
 
-// TODO
+**TODO.**
 
 ##### Content format
 
@@ -91,7 +106,7 @@ If we are writing the collector, JSON. If not, whatever format the agent uses.
 
 ### State
 
-Stand-alone collectors should not store or require any state (state should be stored with the scheduler). Host-based collectors may need to store state (e.g. when the last collection was run).
+Stand-alone collectors may require state state (state should be stored with the scheduler, such as the last time a site was downloaded). Host-based collectors may need to store state (e.g. when the last collection was run).
 
 ### Input Transport Protocol
 
@@ -212,26 +227,8 @@ The AMQP spout pulls messages off the queue and pushes them to the UUID Bolt.
 [Advanced Message Queuing Protocol (AMQP)](http://www.amqp.org/)
 
 ##### Input Format
-There are two types of input messages: (1) messages with data and (2) messages without data that reference an ID in the document store.
 
-All messages should be formatted as a JSON object.
-All JSON messages should be converted to strings (i.e. using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)).
-
-All messages should contain the following fields. Either `document-id` or `content` must be included.
-
-* `sourceName` (string) - the name of the source of the message; e.g. ‘cve’ (required)
-* `sourceUrl` (string) - the url of the document – this should be a link to the document itself; e.g. http://cve.mitre.org/data/downloads/allitems.xml, Note: in some cases this URL will point to a generic URL that requires an API.
-In those cases we will provide the URL and then describe whether we have an API call with it and what metadata was used to get the content from the site. (optional)
-* `sourceMetadataUsed` (string) - will contain context specific metadata for the site being accessed.
-For example if the URL requires a set of query terms or terms for access those are listed (optional)
-* `dateCollected` (number) - the unix timestamp (i.e. date +%s) when the document was collected; e.g. 1377114034 (required)
-* `collectorType` (string) - this defines the type content, whether exogenous or endogenous, enumerated types: WEBContent, hone, assets, netflow  (optional)
-* `documentName` (string) - the name of the document represented by the message; e.g. ‘allitems’ (optional)
-* `documentCreation` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1365012038 (optional)
-* `documentModification` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1366135032 (optional)
-* `contentType` (string) - the MIME type of the message; e.g. text/xml @see http://www.iana.org/assignments/media-types (required)
-* `content` (base64 encoded string) - the JSON object to send to Storm, currently BASE64 encoded  (optional)
-* `documentId` (string) - the ID provided by the document store; only provide an ID if content is not provided (optional)
+[See Collector's Output Format](#output-format)
 
 ##### Output Transport Protocol
 [Storm's Multilang Protocol](https://github.com/nathanmarz/storm/wiki/Multilang-protocol)
@@ -437,21 +434,7 @@ HTTP.
 
 ### Input format
 
-JSON. The following fields may be used by the `add` commands and will be returned by the `get` commands:
-
-* `sourceName` (string) - the name of the source of the message; e.g. ‘cve’ (required)
-* `sourceUrl` (string) - the url of the document – this should be a link to the document itself; e.g. http://cve.mitre.org/data/downloads/allitems.xml, Note: in some cases this URL will point to a generic URL that requires an API.
-In those cases we will provide the URL and then describe whether we have an API call with it and what metadata was used to get the content from the site. (optional)
-* `sourceMetadataUsed` (string) - will contain context specific metadata for the site being accessed.
-For example if the URL requires a set of query terms or terms for access those are listed (optional)
-* `dateCollected` (number) - the unix timestamp (i.e. date +%s) when the document was collected; e.g. 1377114034 (required)
-* `collectorType` (string) - this defines the type content, whether exogenous or endogenous, enumerated types: WEBContent, hone, assets, netflow  (optional)
-* `documentName` (string) - the name of the document represented by the message; e.g. ‘allitems’ (optional)
-* `documentCreation` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1365012038 (optional)
-* `documentModification` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1366135032 (optional)
-* `contentType` (string) - the MIME type of the message; e.g. text/xml @see http://www.iana.org/assignments/media-types (required)
-* `content` (base64 encoded string) - the JSON object to send to Riak, currently BASE64 encoded  (required)
-* `documentId` (string) - `add` will return a documentId and `get` requires a documentId
+[See Collector's Output Format](#output-format)
 
 ### Output Transport Protocol
 
