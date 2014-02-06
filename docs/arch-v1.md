@@ -186,10 +186,10 @@ The data it receives will be transformed into a graph, consistent with the [onto
 The spout will send an acknowledgement to the queue when the messages are received, so that the queue can release these resources.
 
 ### Output Transport Protocol
-[See Graph Bolt](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#graph-bolt)
+[See Alignment Bolt](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#graph-bolt)
 
 ### Output Format
-[See Graph Bolt](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#graph-bolt)
+[See Alignment Bolt](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#graph-bolt)
 
 RT will also add the raw documents it receives to the document store if needed.
 
@@ -244,7 +244,7 @@ JSON object with the following fields:
 #### Route Bolt
 
 ##### Description
-The Route bolt sends a tuple to the appropriate pipeline, depending on whether the tuple contains a structured document or unstructured document.
+The Route bolt sends a tuple to the appropriate pipeline, depending on whether the tuple contains a structured document or unstructured document, based on the data source it was collected from.
 
 ##### Input Transport Protocol
 [Storm's Multilang Protocol](https://github.com/nathanmarz/storm/wiki/Multilang-protocol)
@@ -358,10 +358,10 @@ JSON object with the following fields:
 * `uuid` (string) - the hash of the JSON message
 * `graph` (string) - the GraphSON representation of the unstructured document's concepts (nodes) and relationships (edges)
 
-#### Graph Bolt
+#### Alignment Bolt
 
 ##### Description
-The Graph bolt aligns and merges the new subgraph into the full knowledge graph.
+The Alignment bolt aligns and merges the new subgraph into the full knowledge graph.
 
 ##### Input Transport Protocol
 [Storm's Multilang Protocol](https://github.com/nathanmarz/storm/wiki/Multilang-protocol)
