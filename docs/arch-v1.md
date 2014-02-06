@@ -3,13 +3,24 @@
 ![Architecture diagram](../diagrams/arch.png)
 
 
-In general, the following guidelines should be followed:
+## Guidelines
 
-* Configuration files should be defined in [yaml](http://yaml.org/) 
+* Default configuration files should be defined in [yaml](http://yaml.org/) 
+* Component configuration should be read from the [configuration service](#configuration-service)
 * Messages between services should be formatted as [JSON](http://json.org/) and sent via HTTP
 * Logs should be sent to [logstash](http://logstash.net/) as JSON via the [TCP Input](http://logstash.net/docs/1.2.1/inputs/tcp)
 * Messages into Storm should be via AMQP using [RabbitMQ](http://www.rabbitmq.com/)
 
+
+---------------------------------------------------------------------
+
+## Prerequisites
+
+* [RabbitMQ](http://www.rabbitmq.com/): the message queue that interfaces between the collectors and the [rt processing pipeline](#rt)
+* [Riak](http://basho.com/riak/): the distributed key-value store that stores the raw documents, accessible through the [document-service](#document-service)
+* [Titan](http://thinkaurelius.github.io/titan/): the distributed graph database that stores the knowledge graph, accessible through the [query-service](#query-service)
+* [Logstash](http://logstash.net/): tool for collecting and managing log files from stucco components using [elasticsearch](http://www.elasticsearch.org/overview/elasticsearch/) and [kibana](http://www.elasticsearch.org/overview/kibana/)
+* [etcd](https://github.com/coreos/etcd): tool for sharing configuration and service discovery from stucco components
 
 ---------------------------------------------------------------------
 
@@ -154,7 +165,7 @@ The message queue should pass on the data as is from collectors.
 
 ---------------------------------------------------------------------
 
-## RT (Storm)
+## RT
 
 ### Description
 
@@ -164,7 +175,7 @@ This diagram shows how all the RT components are connected. The diagram at the v
 
 If the data it receives is not already included in the document store, it will be added.
 
-The data it receives will be transformed into a graph, consistent with the [ontology definition](https://github.com/stucco/ontology), and then added into the Titan instance.
+The data it receives will be transformed into a graph, consistent with the [ontology definition](https://github.com/stucco/ontology), and then added into graph store.
 
 ### Input Transport Protocol
 [See AMQP Spout](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#amqp-spout)
@@ -419,7 +430,7 @@ JSON.
 
 ### Description
 
-The Query Service provides the API for the Graph Store to allow the Alignment bolt, the Visualization/UI, and any third-party applications to interface with the graph database.  
+The Query Service provides the API for the Graph Store to allow the Alignment bolt, the Visualization/UI, and any third-party applications to interface with the graph database, implemented in [Titan](http://thinkaurelius.github.io/titan/).
 
 This API provides a [GraphSON](https://github.com/tinkerpop/blueprints/wiki/GraphSON-Reader-and-Writer-Library) interface over HTTP.
 
