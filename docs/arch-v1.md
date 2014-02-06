@@ -5,7 +5,7 @@
 
 In general, the following guidelines should be followed:
 
-* Configuration files should be defined in [yaml](http://yaml.org/)
+* Configuration files should be defined in [yaml](http://yaml.org/) 
 * Messages between services should be formatted as [JSON](http://json.org/) and sent via HTTP
 * Logs should be sent to [logstash](http://logstash.net/) as JSON via the [TCP Input](http://logstash.net/docs/1.2.1/inputs/tcp)
 * Messages into Storm should be via AMQP using [RabbitMQ](http://www.rabbitmq.com/)
@@ -29,10 +29,6 @@ Collectors can either be stand-alone and run on any host, or be host-based and d
 
 Web collectors pull a document via HTTP/HTTPS given a URL. Documents will be decompressed, but no other processing will occur. 
 
-##### Configuration
-
-**TODO.**
-
 ##### Content format
 
 Various (e.g. HTML, XML, CSV). 
@@ -40,10 +36,6 @@ Various (e.g. HTML, XML, CSV).
 #### Scraping collector
 
 Scrapers pull data embedded within a web page via HTTP/HTTPS given a URL and an HTML pattern. 
-
-##### Configuration
-
-**TODO.**
 
 ##### Content format
 
@@ -53,10 +45,6 @@ HTML.
 
 RSS collectors pull an RSS/ATOM feed via HTTP/HTTPS given a URL.
 
-##### Configuration
-
-**TODO.**
-
 ##### Content format
 
 XML.
@@ -65,11 +53,6 @@ XML.
 
 Twitter collectors pull Tweet data via HTTP from the Twitter Search REST API given a user (@username), hashtag (#keyword), or search term.
 
-##### Configuration
-
-Twitter API Key
-Keywords and/or usernames to track
-
 ##### Content format
 
 JSON.
@@ -77,10 +60,6 @@ JSON.
 #### Netflow collector
 
 Netflow collectors will collect from [Argus](http://www.qosient.com/argus/). The collector will listen for argus streams using `ra` tool and convert to XML and pipe to send the flow data to the message queue as a string.
-
-##### Configuration
-
-**TODO.**
 
 ##### Content format
 
@@ -95,10 +74,6 @@ Host-based collectors should be able to collect and forward:
 * System logs
 * [Hone](https://github.com/HoneProject/) data
 * Installed packages
-
-##### Configuration
-
-**TODO.**
 
 ##### Content format
 
@@ -153,8 +128,6 @@ An example output would be:
 
 ### Description
 
-### Configuration
-
 ### State
 
 
@@ -165,7 +138,7 @@ An example output would be:
 ### Description
 
 The message queue accepts input (documents) from the collectors and pushes the documents into the processing pipeline.
-The collectors should send data into the default exchange, the queue named `stucco`. The message queue is implemented with RabbitMQ, which utilizes the AMQP standard.
+The message queue is implemented with [RabbitMQ](http://www.rabbitmq.com/), which implements the AMQP standard.
 
 ### State
 
@@ -192,10 +165,6 @@ This diagram shows how all the RT components are connected. The diagram at the v
 If the data it receives is not already included in the document store, it will be added.
 
 The data it receives will be transformed into a graph, consistent with the [ontology definition](https://github.com/stucco/ontology), and then added into the Titan instance.
-
-### Configuration
-
-config.yaml file sets several options related to the AMQP queue and the number of bolt instances.
 
 ### Input Transport Protocol
 [See AMQP Spout](https://github.com/stucco/docs/blob/master/docs/arch-v1.md#amqp-spout)
@@ -484,8 +453,6 @@ GraphSON.
 
 The configuration service hosts configuration information for all services. It is implemented in [etcd](http://coreos.com/using-coreos/etcd/).
 
-### Configuration
-
 The `etcd` configuration is [described here](https://github.com/coreos/etcd/blob/master/Documentation/configuration.md#configuration-file). The default stucco configuration is loaded into `etcd` when instantiated by the [config-loader](https://github.com/stucco/config-loader).  The default stucco configuration, [`stucco.yml`](https://github.com/stucco/config/blob/master/stucco.yml) is in the [config repo](https://github.com/stucco/config); edit that file to have the configuration changes loaded. The nested configuration in the `stucco.yml` gets translated to the url path, so, 
 
     stucco
@@ -527,28 +494,15 @@ HTTP/REST or using client library.
 
 The logging service collects and aggregates logs from each of the components. The log server is implemented as a [logstash](http://logstash.net/) server with an [elasticsearch](http://www.elasticsearch.org/) backend. 
 
-### Configuration
-
-The logstash configuration for the TCP input should look like this:
-
-input {
-  tcp {
-    type => "stucco-tcp"
-    port => 9563
-    charset => "UTF-8"
-    format => "json_event"
-  }
-}
-
 ### Usage
 
-Sending logs to the server should be done via the [TCP input plugin](http://logstash.net/docs/1.3.2/inputs/tcp). 
+Sending logs to the server should be done via the [TCP input plugin](http://logstash.net/docs/1.3.2/inputs/tcp). The port number for the development environment can be found in the `logstash` configuration section of the [Vagrantfile](https://github.com/stucco/dev-setup/blob/master/Vagrantfile).
 
 The Vagrant VM is set up with a logstash server to aggregate log files. Log files can be input in multiple ways. There is a simple configuration set up in the Vagrantfile. The easiest way to send logs is to send them over a TCP connection. For an example in node.js and python, see https://gist.github.com/jgoodall/6323951
 
 ### Input Transport Protocol
 
-TCP, by default on port 9563.
+TCP.
 
 ### Input Format
 
@@ -556,4 +510,4 @@ JSON. The log message should be a stringified JSON object with the log message i
 
 ### Output
 
-To view the logs, use HTTP with a web browser. The web interface to logstash is implemented by [kibana (v3)](http://www.elasticsearch.org/overview/kibana/).
+To view the logs, use HTTP with a web browser. The web interface to logstash is implemented by [kibana (v3)](http://www.elasticsearch.org/overview/kibana/). For the kibana port number in the development environment, see `webserver_port` in the `kibana` configuration section of the [Vagrantfile](https://github.com/stucco/dev-setup/blob/master/Vagrantfile).
