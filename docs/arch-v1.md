@@ -151,15 +151,15 @@ An example output would be:
 The message queue accepts input (documents) from the collectors and pushes the documents into the processing pipeline.
 The message queue is implemented with [RabbitMQ](http://www.rabbitmq.com/), which implements the AMQP standard.
 
-### State
+### Configuration
 
 The queue should hold messages until they have been processed by the Storm Spout.
 
-### Input format
+### Protocol
 
-The message queue should pass on the data as is from collectors.
+Input and output protocol is [AMQP 0-9-1](http://www.rabbitmq.com/protocol.html).
 
-### Output format
+### Format
 
 The message queue should pass on the data as is from collectors.
 
