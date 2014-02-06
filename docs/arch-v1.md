@@ -1,6 +1,6 @@
 # Stucco Architecture
 
-![Architecture diagram](../diagrams/arch-v0.2.png)
+![Architecture diagram](../diagrams/arch.png)
 
 
 In general, the following guidelines should be followed:
