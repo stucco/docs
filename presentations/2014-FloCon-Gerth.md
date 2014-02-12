@@ -2,7 +2,7 @@
 
 ### Presented at [FloCon 2014](https://www.cert.org/flocon/)
 
-### [Slides](2014-FloCon-Gerth.pdf)
+### [Slides (pdf)](2014-FloCon-Gerth.pdf)
 
 We report early results from a DHS-funded research project that is working on augmenting and annotating flow data in order to provide additional context for cybersecurity analysts. Stucco seeks to organize both structured data, such as that found in CVE, with data from unstructured text from places such as cybersecurity blogs so that it can be presented as part of a visual analytic system.  This research is led by Oak Ridge National Laboratory in collaboration with Pacific Northwest National Laboratory, Stanford University, and REN-ISAC.
 
