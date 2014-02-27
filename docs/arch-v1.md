@@ -104,34 +104,67 @@ Input format will depend on the type of collector.
 
 ### Output Transport Protocol
 
-[Advanced Message Queuing Protocol (AMQP)](http://www.amqp.org/)
+[Advanced Message Queuing Protocol (AMQP)](http://www.amqp.org/), as implemented in RabbitMQ. See the [concepts documentation](http://www.rabbitmq.com/tutorials/amqp-concepts.html) for information about AMQP and RabbitMQ concepts. See the [protocol documentation](http://www.rabbitmq.com/amqp-0-9-1-reference.html) for more on AMQP. Examples below are in [Go](http://golang.org/) using the [amqp package](http://godoc.org/github.com/streadway/amqp). [Other libraries](http://www.rabbitmq.com/devtools.html) should implement similar interfaces.
+
+The RabbitMQ [exchange](http://www.rabbitmq.com/amqp-0-9-1-quickref.html#class.exchange) is exchange-type of `topic` with the exchange-name of `stucco`. 
+
+The exchange declaration options should be:
+
+    "topic",    // type
+    true,       // durable
+    false,      // auto-deleted
+    false,      // internal
+    false,      // noWait
+    nil,        // arguments
+
+The [publish](http://www.rabbitmq.com/amqp-0-9-1-reference.html#basic.publish) options should be:
+
+    stucco,     // publish to an exchange named stucco
+    <routingKey>, // routing to 0 or more queues
+    false,      // mandatory
+    false,      // immediate
+
+The `<routingKeys>` format should be: `stucco.in.<data-type>.<data-name (optional)>`, where:
+
+* data-type (required): the type or type of data, such as cve, nvd, maxmind, cpe, argus, hone.
+* data-name (optional): the name of the data, such as the hostname of the sensor.
+
+The [message options](http://www.rabbitmq.com/amqp-0-9-1-reference.html#class.basic) should be:
+
+        DeliveryMode:    1,    // 1=non-persistent, 2=persistent
+        Timestamp:       time.Now(),
+        ContentType:     "text/plain",
+        ContentEncoding: "",
+        Priority:        1,    // 0-9
+        HasContent:      true, // boolean
+        Body:            <payload>,
+
+`DeliveryMode` should be 'persistent'.
+
+`Timestamp` should be automatically filled out by your amqp client library. If not, the publisher should specify.
+
+`ContentType` should be "text/xml" or "text/csv" or "application/json" or "text/plain" (i.e. collectorType from the output format). This is dependent on the data source.
+
+`ContentEncoding` may be required if things are, for example, gzipped.
+
+`Priority` is optional.
+
+`HasContent` is an application-specific part of the message header that defines whether or not there is content as part of the message. It should be defined in the message header field table using a boolean: `HasContent: true` (if there is data content) or `HasContent: false` (if the document service has the content). The spout will use the document service accordingly. This is the only application-specific data needed.
+
+`Body` is the payload, either the document itself or the id if `HasContent` is false.
+
+The corresponding binding keys for the [queue](http://www.rabbitmq.com/amqp-0-9-1-quickref.html#class.queue) defined in the spout will can use the wildcards to determine which spout should handle which messages:
+
+* * (star) can substitute for exactly one word.
+* # (hash) can substitute for zero or more words.
+
+For example, `stucco.in.#` would listen for all input.
 
 ### Output Format
 
 There are two types of output messages: (1) messages with data and (2) messages without data that reference an ID in the document store.
 
-All messages should be formatted as a JSON object.
-All JSON messages should be converted to strings (i.e. using [JSON.stringify()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)).
 
-All messages should contain the following fields. Either `document-id` or `content` must be included.
-
-* `sourceName` (string) - the name of the source of the message; e.g. ‘cve’ (required)
-* `sourceUrl` (string) - the url of the document – this should be a link to the document itself; e.g. http://cve.mitre.org/data/downloads/allitems.xml, Note: in some cases this URL will point to a generic URL that requires an API.
-In those cases we will provide the URL and then describe whether we have an API call with it and what metadata was used to get the content from the site. (optional)
-* `sourceMetadataUsed` (string) - will contain context specific metadata for the site being accessed.
-For example if the URL requires a set of query terms or terms for access those are listed (optional)
-* `dateCollected` (number) - the unix timestamp (i.e. date +%s) when the document was collected; e.g. 1377114034 (required)
-* `collectorType` (string) - this defines the type content, whether exogenous or endogenous, enumerated types: WEBContent, hone, assets, netflow  (optional)
-* `documentName` (string) - the name of the document represented by the message; e.g. ‘allitems’ (optional)
-* `documentCreation` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1365012038 (optional)
-* `documentModification` (number) - the unix timestamp (i.e. date +%s) of the document creation; e.g. 1366135032 (optional)
-* `contentType` (string) - the MIME type of the message; e.g. text/xml @see http://www.iana.org/assignments/media-types (required)
-* `content` (base64 encoded string) - the JSON object to send to Storm, currently BASE64 encoded  (optional)
-* `documentId` (string) - the ID provided by the document store; only provide an ID if content is not provided (optional)
-
-An example output would be:
-
-// TODO - ADD EXAMPLE
 
 ---------------------------------------------------------------------
 
