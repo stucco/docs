@@ -473,11 +473,11 @@ The API will be implemented with Rexter and a set of [Rexter Extensions.](https:
 
 ### Routes
 
-* `host:port/graphs/stucco/type/<typename>`  
+* `host:port/graphs/graph/type/<typename>`  
   Returns a list of all nodes of type `<typename>`
-* `host:port/graphs/stucco/node/<nodename>`  
+* `host:port/graphs/graph/node/<nodename>`  
   Returns the node with the specified `<nodename>`
-* `host:port/graphs/stucco/tp/gremlin?<gremlinquery>`  
+* `host:port/graphs/graph/tp/gremlin?<gremlinquery>`  
   Runs the given `<gremlinquery>` and returns any results
 
 ### Transport Protocol
