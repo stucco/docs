@@ -297,7 +297,7 @@ Another consideration is that these approaches vary greatly in speed, so a suita
     {
       "vertices": [
         {
-          "_id": "CVE-2012-5217",
+          "_id": "CVE-2013-5217",
           "_type": "vertex",
           "vertexType": "vulnerability",
           "source": "Something that isn't NVD",
