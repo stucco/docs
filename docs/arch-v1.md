@@ -1,6 +1,6 @@
 # Stucco Architecture
 
-![Architecture diagram](../diagrams/arch.png)
+![Architecture diagram](../diagrams/arch-2014-03.png)
 
 
 ## Guidelines
