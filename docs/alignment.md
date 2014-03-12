@@ -9,6 +9,8 @@ There are two broad categories of alignment:
   * If a matching canonical name is found in the knowledge graph, [merge properties](#merge-properties) and [merge edges](#merge-edges).
 2. Merging nodes without canonical names / unique IDs (e.g. malware). Some of these nodes may not have a canonical name, others may have a canoncial name but it is not available:
   * [Identify equivalent nodes](#identify-equivalent-nodes) and score the confidence that the two nodes refer to the same domain concept.
+  * if a suitable match is found, [merge properties](#merge-properties) and [merge edges](#merge-edges) as above.
+  * if a suitable match is not found, add the new node, and [merge edges](#merge-edges) as above if needed.
 
 ## General Concerns/Issues
 The section attempts to highlight issues that the current alignment process either needs to resolve.
@@ -87,18 +89,57 @@ Nodes can be added or merged into the knowledge graph. The edges associated with
 
 ## Identify Equivalent Nodes
 
-Identify if a new node is equivalent to an existing node for a subset of nodes in the knowledge graph. The scope of identifying equivalent nodes can be narrowed down by:
+This process starts with a new node, with no matching ID found in the database.  The database is searched for existing nodes which may match, and if a match is found, the node properties and edges are merged as above.  If a matching node is not found, it is added, and its edges are merged or added as needed.
 
-1. only searching the same node type.
-2. only searching nodes that have identical values for important properties, based on some metadata defined in the ontology.
+Some node types, such as IP addresses, should always have matching IDs, and should not search for approximate matches.
+However other node types, such as malware, will very rarely have matching IDs even when there is a matching node present. 
+(The nodes match if they represent the same real-world entity, even if they do not have the same ID.)
 
-Based on this subset of nodes, a comparison algorithm will run to assign a similarity score between the new node and each other node in the subset.
+### Find a group of possible matches
 
-  * This score reflects the probability that these two nodes are describing the same entity.
-  * It will be a float between 0 and 1.
-  * This is calculated by function TBD.
-  * If the value is 0, (or below some threshold TBD,) the edge should be excluded.
-  * If the value is 1, (or above some threshold TBD,) the two nodes should be merged.
+When searching for a matching node, the first step is to build a restricted set of potential matches.
+
+The purpose of this step is to reduce the number expensive of in-depth comparisons that are needed, by replacing most of them with a much cheaper comparison that eliminates most nodes.
+To start, only nodes of the same node type should be considered (eg. malware can only possibly match malware, etc.)
+Next, a "canopy" is found, which contains all potentially-matching nodes.
+The specifics of this depend on the comparison techniques for the field and node pairs chosen below, but as an example, assume that nodes are matched based on distance, and that the node distance depends on the weighted sum of property distances.  If one pair of properties have a large enough distance, that alone could make a match impossible, so comparing the remaining fields is not needed.
+
+### Find the distance between all pairs of fields
+
+For each potentially matching node that remains, calculate the distance for each of their properties.
+There are many approaches to finding these distances, and the distance metric used may vary based on the data types and the field's meaning.
+
+1. Token distance - Token distance compares two multi-word strings, breaks them into individual words, and compares the counts of words in each string.  (This is sometimes described as a "bag of words.")  This can be expanded to consider word frequency and misspellings in the final distance.  
+This is best suited to reasonably long sections of text, such as a description field.  
+2. Character distance - Character distance, in the simplest case, is the "edit distance" or "Levenshtein distance" between two strings - the total number of insert, delete, or replace operations needed to transform one string into another.  This can be expensive, but some optimizations are possible.
+There are numerous variations on this basic approach, such as giving different weights to the different operations, or reducing the cost of adjacent insertions, or varying the cost based on position within the string.
+This can also include varying the cost based on the specific substitution performed, to account for misspellings and phonetic similarity.
+One interesting approach is to break the strings down into "q-grams" (overlapping substrings of some fixed length) and then finding the token distance using one of the techniques from item 1.
+3. Numeric Distance - The techniques for finding distance between numeric fields are generally much simpler than the above categories.  In most cases, this is simply the difference between the values.
+However often in the literature, numeric fields are simply treated as strings, and one of the above methods are used.
+4. Domain-specific distance - This involves finding a distance based on some domain specific rules.  For example, if a field contained a log level (Emergency, Alert, Critical, Error, Warning, Notice, Info, Debug) then "Debug" may have a distance of 1 from "Info", and a distance of 4 from "Error".
+
+Choosing a suitable distance metric depends on the data type and the meaning of the field, but it also depends on the types of errors anticipated.  Most of the literature focuses on human error, such as typos, misspellings, and inconsistent representation (eg. "Avenue" vs. "Ave.")  In our case, we anticipate most of the errors will originate in the text extraction process, and handling these types of errors has been little studied.
+
+## Find matching nodes based on properties
+
+After all property distances have been found, they should be combined to find nodes which match overall.  Again, there are many techniques available to achieve this.  Most or all of these techniques can be extended to add a "reject region" for nodes that are too uncertain to be automatically assigned as a match or a non-match, but are instead added to a queue for further (generally manual) review.
+
+1. Probabilistic approaches - There are many approaches that find the probability of a node matching based on the probability of the pairs of fields matching.  This requires either learning or estimating these probabilities for each field.
+Some approaches add an adjustable cost factor, which is useful in cases where false positives and false negatives have different impacts on the use of the data.
+2. Supervised and semi-supervised approaches - if labeled training data is available, a variety of supervised and semi-supervised machine learning techniques are available, using the list of distances and/or the node properties as the input vector.  
+Examples include using Support Vector Machines (SVM), clustering approaches, and graph partition approaches.  Note that some of these are intended to find groups of matching entries, instead of matching pairs as in our case.
+3. Unsupervised approaches - These generally rely on clustering to find groups of similar nodes.  In some cases, there is an additional step to review and label these clusters.
+In some cases, after labeling these clusters, this data is then used to "bootstrap" a different approach.
+4. Active-learning approaches - These are similar to the approaches above, but they make use of the fact that most cases are either obvious matches or obvious non-matches.  They find the relatively few ambiguous cases, prompt for human labeling, and then adjust their parameters as needed.  These approaches seem promising, but somewhat less studied than the previous two categories.
+5. Distance-based approaches - These approaches also make use of the fact that most non-matching nodes are very distant ("sparse neighborhood",) and matching nodes tend to be few and close ("compact set".)  
+In the simplest case, this involves finding a distance from a weighted sum of the field distances, and then comparing that node distance with some threshold.  However, the problem becomes finding suitable weights for each field, and finding an appropriate threshold for a match, which tends to lead back to the above approaches.
+6. Rule-based approaches - These approaches are based on constructing domain-specific rules that must be satisfied for a match.  These rules are often expressed in some domain-specific language.
+These approaches tend to be highly accurate, but they require a large amount of manual effort from a domain expert to create and troubleshoot these rules.
+One interesting approach uses labeled training data to create lists of potential rules, which are then reviewed and adjusted by a domain expert.
+
+All of these approaches are adopted from record matching in conventional databases, which is a well studied problem.  Unfortunately, there is still no overall best approach for that problem, instead, it is highly dependent on the domain, on the data, and on what (if any) training data or domain expertise is available.  
+Another consideration is that these approaches vary greatly in speed, so a suitable choice will depend on the fraction of nodes that must be matched with this process, the number of potential matches in the canopy for each node, and the overall rate of incoming data vs. available resources.
 
 - - - - -
 
