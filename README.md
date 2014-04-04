@@ -1,7 +1,7 @@
 stucco documentation
 ====================
 
-## Architecture
+## Documentation
 
 Documentation is on [the wiki](https://github.com/stucco/docs/wiki).
 
