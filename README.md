@@ -6,7 +6,7 @@ stucco documentation
 Documentation is on [the wiki](https://github.com/stucco/docs/wiki).
 
 ## Papers and Presentations
-
+ Conference Poster accepted and presented, C.R. Harshaw, R.A. Bridges, M.D. Iannacone, J.R. Goodall, "Graph-Prints: A Contextual, Model-Free, Multi-Scale Network Analysis Framework for Characterizing Network Flow Data", FloCon, Jan 13th, 2016. (PTS # 59243)
 * Presentation: J. Gerth and J. R. Gooodall. "Stucco - Situation and Threat Understanding by Correlating Contextual Observations". [*FloCon*](https://www.cert.org/flocon/), 2014. [abstract](./presentations/2014-FloCon-Gerth.md) / [presentation (pdf)](https://github.com/stucco/docs/blob/master/presentations/2014-FloCon-Gerth.pdf?raw=true)
 * Presentation: R.A.Bridges "New Techniques for Entity Extraction of Cyber Security Concepts". CISML Seminar, March 28, 2014. [presentation (ppt)](./presentations/2014.03.28-bridges-cisml.pptx?raw=true)
 * Presentation: R.A.Bridges "Stucco - Situation and Threat Understanding by Correlating Contextual Observations". ORNL short presentation to Mitre visitors, May 06, 2014. [presentation (ppt)](./presentations/2014.05.16-bridges-stucco.pptx?raw=true)
