@@ -6,6 +6,8 @@ stucco documentation
 Documentation is on [the wiki](https://github.com/stucco/docs/wiki).
 
 ## Papers and Presentations
+* Conference Paper Submitted. C.R. Harshaw, R.A. Bridges, M.D. Iannacone, J.R. Goodall, "GraphPrints: Towards a Graph Analytic Method for Network Anomaly Detection" to CISRC 2016, Jan 28, 2016 (PTS # 61158)  
+* Conference Paper Submitted. R.A. Bridges, K.T.M. Huffer, C.L.Jones, M.D. Iannacone, J.R. Goodall, "Cyber Entity Extraction--Evaluating Current Methods, Making the Most of What's Available", submitted to NAACL HTL 2016 on Jan. 6, 2016, (PTS # 60824)
 * Presentation: C.R. Harshaw, R.A. Bridges, M.D. Iannacone, J.R. Goodall, "Graph-Prints: A Contextual, Model-Free, Multi-Scale Network Analysis Framework for Characterizing Network Flow Data", [*FloCon*](https://www.cert.org/flocon/), 2016.
 * Presentation: J. Gerth and J. R. Goodall. "Stucco - Situation and Threat Understanding by Correlating Contextual Observations". [*FloCon*](https://www.cert.org/flocon/), 2014. [abstract](./presentations/2014-FloCon-Gerth.md) / [presentation (pdf)](https://github.com/stucco/docs/blob/master/presentations/2014-FloCon-Gerth.pdf?raw=true)
 * Presentation: R.A.Bridges "New Techniques for Entity Extraction of Cyber Security Concepts". CISML Seminar, March 28, 2014. [presentation (ppt)](./presentations/2014.03.28-bridges-cisml.pptx?raw=true)
