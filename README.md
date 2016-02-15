@@ -6,8 +6,8 @@ stucco documentation
 Documentation is on [the wiki](https://github.com/stucco/docs/wiki).
 
 ## Papers and Presentations
-* Conference Paper Submitted. C.R. Harshaw, R.A. Bridges, M.D. Iannacone, J.R. Goodall, "GraphPrints: Towards a Graph Analytic Method for Network Anomaly Detection" to CISRC 2016, Jan 28, 2016 [paper (pdf)](./papers/2016-cisrc-graphprints-submitted.pdf)  
-* Conference Paper Submitted. R.A. Bridges, K.T.M. Huffer, C.L.Jones, M.D. Iannacone, J.R. Goodall, "Cyber Entity Extraction--Evaluating Current Methods, Making the Most of What's Available", submitted to NAACL HTL 2016 on Jan. 6, 2016, [paper (pdf)](./papers/2016-NAACL-submission.pdf)
+* Conference Paper Submitted: C.R. Harshaw, R.A. Bridges, M.D. Iannacone, J.R. Goodall, "GraphPrints: Towards a Graph Analytic Method for Network Anomaly Detection" to CISRC 2016, Jan 28, 2016 [paper (pdf)](./papers/2016-cisrc-graphprints-submitted.pdf)  
+* Conference Paper Submitted: R.A. Bridges, K.T.M. Huffer, C.L.Jones, M.D. Iannacone, J.R. Goodall, "Cyber Entity Extraction--Evaluating Current Methods, Making the Most of What's Available", submitted to NAACL HTL 2016 on Jan. 6, 2016, [paper (pdf)](./papers/2016-NAACL-submission.pdf)
 * Presentation: C.R. Harshaw, R.A. Bridges, M.D. Iannacone, J.R. Goodall, "Graph-Prints: A Contextual, Model-Free, Multi-Scale Network Analysis Framework for Characterizing Network Flow Data" [*FloCon*](https://www.cert.org/flocon/), 2016 [poster (pdf)](./posters/2016-Flocon-Poster)
 * Presentation: J. Gerth and J. R. Goodall. "Stucco - Situation and Threat Understanding by Correlating Contextual Observations". [*FloCon*](https://www.cert.org/flocon/), 2014. [abstract](./presentations/2014-FloCon-Gerth.md) / [presentation (pdf)](https://github.com/stucco/docs/blob/master/presentations/2014-FloCon-Gerth.pdf?raw=true)
 * Presentation: R.A.Bridges "New Techniques for Entity Extraction of Cyber Security Concepts". CISML Seminar, March 28, 2014. [presentation (ppt)](./presentations/2014.03.28-bridges-cisml.pptx?raw=true)
