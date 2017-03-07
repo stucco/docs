@@ -1,6 +1,10 @@
 stucco documentation
 ====================
 
+## Issues
+
+Please track issues for Stucco on the [issues page in this repo](https://github.com/stucco/docs/issues).
+
 ## Documentation
 
 Documentation is on [the wiki](https://github.com/stucco/docs/wiki).
